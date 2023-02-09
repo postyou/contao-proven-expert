@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $peCache: "@contao_proven_expert.cache"
+
+    Postyou\ContaoProvenExpert\:
+        resource: ../src/
+        exclude: ../src/{ContaoManager,DependencyInjection}
+
+    Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags:
+        public: true
+
+    contao_proven_expert.cache:
+        class: Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter
+        arguments: ["contao_proven_expert", 0, "%kernel.cache_dir%"]

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <body>
+    <file>
+      <trans-unit id="tl_page.pe_legend">
+        <source>ProvenExpert</source>
+        <target>ProvenExpert</target>
+      </trans-unit>
+      <trans-unit id="tl_page.usePeApi.0">
+        <target>ProvenExpert API verwenden</target>
+      </trans-unit>
+      <trans-unit id="tl_page.usePeApi.1">
+        <target>ProvenExpert API Zugangsdaten eintragen.</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peApiId.0">
+        <source>ProvenExpert API ID</source>
+        <target>ProvenExpert API-ID</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peApiId.1">
+        <source>Enter the API ID of your ProvenExpert account.</source>
+        <target>Geben Sie den API-ID für Ihr ProvenExpert Konto ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peApiKey.0">
+        <source>ProvenExpert API Key</source>
+        <target>ProvenExpert API-Schlüssel</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peApiKey.1">
+        <source>Enter the API key of your ProvenExpert account.</source>
+        <target>Geben Sie den API-Schlüssel für Ihr ProvenExpert Konto ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peUploadDirectory.0">
+        <source>ProvenExpert Asset Directory</source>
+        <target>ProvenExpert Asset Ordner</target>
+      </trans-unit>
+      <trans-unit id="tl_page.peUploadDirectory.1">
+        <source>Choose a directory to save ProvenExpert assets.</source>
+        <target>Wählen Sie einen Ordner, in dem die ProvenExpert Assets gespeichert werden können.</target>
+      </trans-unit>
+    </file>
+  </body>
+</xliff>

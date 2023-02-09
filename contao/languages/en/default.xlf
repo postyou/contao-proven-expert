@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <body>
+    <file>
+      <trans-unit id="FMD.proven_expert_widget.0">
+        <target>ProvenExpert Widget</target>
+      </trans-unit>
+      <trans-unit id="FMD.proven_expert_widget.1">
+        <target>A frontend module for displaying a ProvenExpert Widget.</target>
+      </trans-unit>
+      <trans-unit id="FMD.proven_expert_rich_snippet.0">
+        <target>ProvenExpert Google Stars</target>
+      </trans-unit>
+      <trans-unit id="FMD.proven_expert_rich_snippet.1">
+        <target>A frontend module for displaying the ProvenExpert Google Stars.</target>
+      </trans-unit>
+    </file>
+  </body>
+</xliff>

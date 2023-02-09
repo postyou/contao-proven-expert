@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <body>
+    <file>
+      <trans-unit id="tl_module.peWidgetType.0">
+        <target>Type</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetType.1">
+        <target>Choose the type of the widget.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetWidth.0">
+        <target>Width</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetWidth.1">
+        <target>Specify the width of the widget (in px).</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetOptions.0">
+        <target>Options</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetOptions.1">
+        <target>Here you can specify more options.</target>
+      </trans-unit>
+    </file>
+  </body>
+</xliff>

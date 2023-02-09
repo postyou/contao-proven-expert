@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+  <body>
+    <file>
+      <trans-unit id="tl_module.peWidgetType.0">
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetType.1">
+        <target>Wählen Sie den Typ des Widgets aus.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetWidth.0">
+        <target>Breite</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetWidth.1">
+        <target>Geben Sie die Breite des Widgets an (in px).</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetOptions.0">
+        <target>Optionen</target>
+      </trans-unit>
+      <trans-unit id="tl_module.peWidgetOptions.1">
+        <target>Hier können Sie weitere Optionen angeben.</target>
+      </trans-unit>
+    </file>
+  </body>
+</xliff>

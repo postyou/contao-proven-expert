@@ -1,0 +1,7 @@
+# Composer
+/composer.lock
+/vendor/
+
+# Configuration
+/.vscode/
+.php-version
