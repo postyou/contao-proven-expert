@@ -45,7 +45,9 @@ class LoadPageDetailsListener
             return;
         }
 
-        $this->provider->setCredentials([$root->peApiId, $root->peApiKey]);
+        if (!empty($root->peApiId) && !empty($root->peApiKey)) {
+            $this->provider->setCredentials([$root->peApiId, $root->peApiKey]);
+        }
 
         $page->peUploadDirectory = $root->peUploadDirectory;
     }
