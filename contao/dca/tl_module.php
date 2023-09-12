@@ -41,8 +41,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['peHtml'] = [
     'sql' => 'text NULL',
 ];
 
-$GLOBALS['TL_DCA']['tl_module']['fields']['html']['eval']['tl_class'] .= ' clr';
-
 $GLOBALS['TL_DCA']['tl_module']['palettes'][ProvenExpertWidget::TYPE] = '
     {title_legend},name,headline,type;
     {config_legend},peWidgetType;
