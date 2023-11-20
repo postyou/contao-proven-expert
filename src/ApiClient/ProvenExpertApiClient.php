@@ -20,7 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ProvenExpertApiClient
 {
-    private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
+    private const BASE_URI = 'https://www.provenexpert.com/api/v10/';
 
     private $client;
 
@@ -72,7 +72,7 @@ class ProvenExpertApiClient
             }
 
             if ('error' === $content['status']) {
-                throw new ProvenExpertApiException($content['errors']);
+                throw new ProvenExpertApiException(isset($content['errors']) ? $content['errors'] : []);
             }
         } catch (ExceptionInterface|ProvenExpertApiException $e) {
             if (Config::get('debugMode')) {
