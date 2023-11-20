@@ -79,10 +79,6 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
         // Fetch the widget
         $response = $this->peApiClient->getRichsnippet($options);
 
-        if ('error' === $response['status']) {
-            return '';
-        }
-
         return $response['html'];
     }
 }

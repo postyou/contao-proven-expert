@@ -97,10 +97,6 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
         // Fetch the widget
         $response = $this->peApiClient->createWidget($options);
 
-        if ('error' === $response['status']) {
-            return '';
-        }
-
         $html = \is_array($response['html']) ? implode('', $response['html']) : $response['html'];
 
         $this->widgetUtil->downloadImageSrc($html, $page, $model->id);

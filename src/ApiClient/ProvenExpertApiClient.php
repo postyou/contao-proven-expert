@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\ApiClient;
 
+use Contao\Config;
+use Contao\CoreBundle\Monolog\ContaoContext;
+use Psr\Log\LoggerInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ProvenExpertApiClient
@@ -22,9 +26,12 @@ class ProvenExpertApiClient
 
     private $credentials;
 
-    public function __construct(HttpClientInterface $client)
+    private $logger;
+
+    public function __construct(HttpClientInterface $client, LoggerInterface $logger)
     {
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     public function setCredentials(array $credentials): void
@@ -55,6 +62,32 @@ class ProvenExpertApiClient
             ]
         );
 
-        return $response->toArray();
+        $content = [];
+
+        try {
+            $content = $response->toArray(true);
+
+            if (!isset($content['status'])) {
+                throw new ProvenExpertApiException(['The ProvenExpert API returned an invalid response']);
+            }
+
+            if ('error' === $content['status']) {
+                throw new ProvenExpertApiException($content['errors'] ?? []);
+            }
+        } catch (ExceptionInterface|ProvenExpertApiException $e) {
+            if (Config::get('debugMode')) {
+                // Rethrow the exception in debug mode
+                throw $e;
+            }
+
+            $this->logger->error(
+                $e->getMessage().' Try activating the debug mode for more details.',
+                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]
+            );
+        }
+
+        $content['html'] ??= '';
+
+        return $content;
     }
 }
