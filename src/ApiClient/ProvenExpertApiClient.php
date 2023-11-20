@@ -72,7 +72,7 @@ class ProvenExpertApiClient
             }
 
             if ('error' === $content['status']) {
-                throw new ProvenExpertApiException($content['errors'] ?? []);
+                throw new ProvenExpertApiException($content['errors']);
             }
         } catch (ExceptionInterface|ProvenExpertApiException $e) {
             if (Config::get('debugMode')) {
@@ -86,7 +86,9 @@ class ProvenExpertApiClient
             );
         }
 
-        $content['html'] ??= '';
+        if (!isset($content['html'])) {
+            $content['html'] = '';
+        }
 
         return $content;
     }
