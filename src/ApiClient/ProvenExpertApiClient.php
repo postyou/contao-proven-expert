@@ -20,7 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ProvenExpertApiClient
 {
-    private const BASE_URI = 'https://www.provenexpert.com/api/v10/';
+    private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
 
     private $client;
 
