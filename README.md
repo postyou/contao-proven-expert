@@ -1,5 +1,8 @@
 # Contao ProvenExpert
 
+[![](https://img.shields.io/packagist/v/postyou/contao-proven-expert.svg)](https://packagist.org/packages/postyou/contao-proven-expert)
+[![](https://img.shields.io/packagist/l/postyou/contao-proven-expert.svg)](https://packagist.org/packages/postyou/contao-proven-expert)
+
 This extension integrates the ProvenExpert API in contao. An account at [ProvenExpert](https://www.provenexpert.com) is required.
 
 ## Goal
@@ -11,10 +14,10 @@ This extension tries to store ProvenExpert content locally whenever possible, so
 
 ## Cache
 
-The API response is cached and automatically updated every hour. You can manually update the content by:
+The API response is cached and automatically updated every hour. You can manually clear the cache by either:
 
--   Saving the corresponding frontend module
--   Purging the ProvenExpert cache via the system maintenance
+-   saving the corresponding frontend module or
+-   purging the ProvenExpert cache via the system maintenance
 
 ## Frontend Modules
 
