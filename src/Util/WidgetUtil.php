@@ -28,6 +28,18 @@ class WidgetUtil
         $this->client = $client;
     }
 
+    public function moveStylesToHead(string $html): string
+    {
+        if (preg_match_all('/<style[\s\S]+?<\/style>/s', $html, $matches)) {
+            foreach ($matches[0] as $match) {
+                $html = str_replace($match, '', $html);
+                $GLOBALS['TL_HEAD'][] = $match;
+            }
+        }
+
+        return $html;
+    }
+
     public function downloadImageSrc(string &$html, PageModel $page, $modelId): void
     {
         $uuid = StringUtil::binToUuid($page->peUploadDirectory);
