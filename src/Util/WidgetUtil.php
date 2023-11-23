@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\Util;
 
+use Contao\Config;
+use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\PageModel;
 use Contao\StringUtil;
+use Psr\Log\LoggerInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WidgetUtil
@@ -23,9 +27,13 @@ class WidgetUtil
     /** @var HttpClientInterface */
     private $client;
 
-    public function __construct(HttpClientInterface $client)
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(HttpClientInterface $client, LoggerInterface $logger)
     {
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     public function moveStylesToHead(string $html): string
@@ -56,12 +64,28 @@ class WidgetUtil
 
     private function downloadFile(string $url, string $path): string
     {
+        $response = $this->client->request('GET', $url);
+
+        try {
+            $image = $response->getContent(true);
+        } catch (ExceptionInterface $e) {
+            if (Config::get('debugMode')) {
+                // Rethrow the exception in debug mode
+                throw $e;
+            }
+
+            $this->logger->error(
+                'ProvenExpert image download: '.$e->getMessage().' Try activating the debug mode for more details.',
+                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]
+            );
+
+            return '';
+        }
+
         $ext = strtok(pathinfo($url, PATHINFO_EXTENSION), '?');
         $file = new File($path.'.'.$ext);
 
-        $response = $this->client->request('GET', $url);
-
-        $file->write($response->getContent());
+        $file->write($image);
 
         $file->close();
 
