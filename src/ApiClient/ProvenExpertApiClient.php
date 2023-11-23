@@ -22,10 +22,13 @@ class ProvenExpertApiClient
 {
     private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
 
+    /** @var HttpClientInterface */
     private $client;
 
+    /** @var string[] */
     private $credentials;
 
+    /** @var LoggerInterface */
     private $logger;
 
     public function __construct(HttpClientInterface $client, LoggerInterface $logger)
@@ -34,21 +37,39 @@ class ProvenExpertApiClient
         $this->logger = $logger;
     }
 
+    /**
+     * @param string[] $credentials
+     */
     public function setCredentials(array $credentials): void
     {
         $this->credentials = $credentials;
     }
 
+    /**
+     * @param array<string, int|string> $data
+     *
+     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     */
     public function createWidget(array $data): array
     {
         return $this->request('widget/create', $data);
     }
 
+    /**
+     * @param array<string, int|string> $data
+     *
+     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     */
     public function getRichsnippet(array $data = []): array
     {
         return $this->request('rating/summary/richsnippet', $data);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     */
     private function request(string $path, array $data): array
     {
         $response = $this->client->request(
@@ -65,6 +86,7 @@ class ProvenExpertApiClient
         $content = [];
 
         try {
+            /** @var array{ 'status'?: 'error'|'success', 'errors'?: string[] } $content */
             $content = $response->toArray(true);
 
             if (!isset($content['status'])) {
@@ -72,7 +94,7 @@ class ProvenExpertApiClient
             }
 
             if ('error' === $content['status']) {
-                throw new ProvenExpertApiException(isset($content['errors']) ? $content['errors'] : []);
+                throw new ProvenExpertApiException($content['errors'] ?? []);
             }
         } catch (ExceptionInterface|ProvenExpertApiException $e) {
             if (Config::get('debugMode')) {

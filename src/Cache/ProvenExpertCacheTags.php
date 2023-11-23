@@ -18,6 +18,7 @@ class ProvenExpertCacheTags
 {
     public const NAMESPACE = 'contao_proven_expert';
 
+    /** @var TagAwareAdapterInterface */
     private $peCache;
 
     public function __construct(TagAwareAdapterInterface $peCache)
@@ -25,11 +26,17 @@ class ProvenExpertCacheTags
         $this->peCache = $peCache;
     }
 
+    /**
+     * @param int|string $id
+     */
     public static function moduleTag($id): string
     {
         return self::NAMESPACE.'mod_'.$id;
     }
 
+    /**
+     * @param int|string $id
+     */
     public function invalidateTagsForModule($id): void
     {
         $this->peCache->invalidateTags([self::moduleTag($id)]);

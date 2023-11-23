@@ -12,11 +12,18 @@ namespace Postyou\ContaoProvenExpert\ApiClient;
 
 class ProvenExpertApiException extends \RuntimeException
 {
+    /**
+     * @param string[] $errors
+     * @param int      $code
+     */
     public function __construct(array $errors = [], $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($this->createMessage($errors), $code, $previous);
     }
 
+    /**
+     * @param string[] $errors
+     */
     public function createMessage(array $errors): string
     {
         if ([] === $errors) {

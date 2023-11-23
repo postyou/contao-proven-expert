@@ -18,6 +18,7 @@ use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags;
 
 class ProvenExpertModulesListener
 {
+    /** @var ProvenExpertCacheTags */
     private $provenExpertCacheTags;
 
     public function __construct(ProvenExpertCacheTags $provenExpertCacheTags)
@@ -29,6 +30,8 @@ class ProvenExpertModulesListener
      * @Callback(table="tl_module", target="fields.peWidgetType.options")
      *
      * @param mixed $dc
+     *
+     * @return array<string, string>|void
      */
     public function onOptions($dc)
     {
@@ -56,7 +59,7 @@ class ProvenExpertModulesListener
      */
     public function onSubmit($dc): void
     {
-        if (!$dc instanceof DataContainer || !str_starts_with($dc->activeRecord->type, 'proven_expert_')) {
+        if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with($dc->activeRecord->type, 'proven_expert_')) {
             return;
         }
 

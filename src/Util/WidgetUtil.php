@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WidgetUtil
 {
+    /** @var HttpClientInterface */
     private $client;
 
     public function __construct(HttpClientInterface $client)

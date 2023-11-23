@@ -20,7 +20,9 @@
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0",
-        "friendsofphp/php-cs-fixer": "^3.12"
+        "friendsofphp/php-cs-fixer": "^3.12",
+        "phpstan/phpstan": "^0.12.100",
+        "phpstan/phpstan-symfony": "^0.12.44"
     },
     "conflict": {
         "contao/manager-plugin": "<2.0 || >=3.0"
