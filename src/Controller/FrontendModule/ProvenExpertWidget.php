@@ -57,9 +57,10 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
         if (!$peCacheItem->isHit()) {
             $html = $this->getHtml($page, $model);
 
-            $peCacheItem->set($html);
-
-            $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $model->id]);
+            if (!empty($html)) {
+                $peCacheItem->set($html);
+                $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $model->id]);
+            }
         }
 
         // Get either the cached version or the db fallback.
