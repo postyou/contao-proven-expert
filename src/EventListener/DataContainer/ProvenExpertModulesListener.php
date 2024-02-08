@@ -18,22 +18,16 @@ use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags;
 
 class ProvenExpertModulesListener
 {
-    /** @var ProvenExpertCacheTags */
-    private $provenExpertCacheTags;
-
-    public function __construct(ProvenExpertCacheTags $provenExpertCacheTags)
-    {
-        $this->provenExpertCacheTags = $provenExpertCacheTags;
-    }
+    public function __construct(
+        private readonly ProvenExpertCacheTags $provenExpertCacheTags,
+    ) {}
 
     /**
      * @Callback(table="tl_module", target="fields.peWidgetType.options")
      *
-     * @param mixed $dc
-     *
      * @return array<string, string>|void
      */
-    public function onOptions($dc)
+    public function onOptions(mixed $dc)
     {
         if (!$dc instanceof DataContainer) {
             return;
@@ -54,12 +48,10 @@ class ProvenExpertModulesListener
 
     /**
      * @Callback(table="tl_module", target="config.onsubmit")
-     *
-     * @param mixed $dc
      */
-    public function onSubmit($dc): void
+    public function onSubmit(mixed $dc): void
     {
-        if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with($dc->activeRecord->type, 'proven_expert_')) {
+        if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with((string) $dc->activeRecord->type, 'proven_expert_')) {
             return;
         }
 

@@ -18,13 +18,9 @@ class ProvenExpertCacheTags
 {
     public const NAMESPACE = 'contao_proven_expert';
 
-    /** @var TagAwareAdapterInterface */
-    private $peCache;
-
-    public function __construct(TagAwareAdapterInterface $peCache)
-    {
-        $this->peCache = $peCache;
-    }
+    public function __construct(
+        private readonly TagAwareAdapterInterface $peCache,
+    ) {}
 
     /**
      * @param int|string $id

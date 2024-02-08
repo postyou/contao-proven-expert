@@ -33,24 +33,18 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
 {
     public const TYPE = 'proven_expert_widget';
 
-    private $peApiClient;
-    private $peCache;
-    private $widgetUtil;
-    private $db;
-
-    public function __construct(ProvenExpertApiClient $peApiClient, TagAwareAdapterInterface $peCache, WidgetUtil $widgetUtil, Connection $db)
-    {
-        $this->peApiClient = $peApiClient;
-        $this->peCache = $peCache;
-        $this->widgetUtil = $widgetUtil;
-        $this->db = $db;
-    }
+    public function __construct(
+        private readonly ProvenExpertApiClient $peApiClient,
+        private readonly TagAwareAdapterInterface $peCache,
+        private readonly WidgetUtil $widgetUtil,
+        private readonly Connection $db,
+    ) {}
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $page = $this->getPageModel();
 
-        if (null === $page) {
+        if (!$page) {
             return new Response();
         }
 

@@ -18,17 +18,15 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 class ProvenExpertCacheItem
 {
-    private $peCache;
-    private $model;
     private $cacheItem;
 
-    public function __construct(TagAwareAdapterInterface $peCache, PageModel $page, ModuleModel $model)
-    {
-        $this->model = $model;
-        $this->peCache = $peCache;
-
-        $key = implode('.', ['contao_proven_expert', $page->rootId, $model->id]);
-        $this->cacheItem = $peCache->getItem($key);
+    public function __construct(
+        private readonly TagAwareAdapterInterface $peCache,
+        PageModel $page,
+        private readonly ModuleModel $model,
+    ) {
+        $key = implode('.', ['contao_proven_expert', $page->rootId, $this->model->id]);
+        $this->cacheItem = $this->peCache->getItem($key);
     }
 
     public function isHit(): bool

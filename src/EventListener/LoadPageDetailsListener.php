@@ -21,20 +21,16 @@ use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
  */
 class LoadPageDetailsListener
 {
-    /** @var ProvenExpertApiClient */
-    private $provider;
-
-    public function __construct(ProvenExpertApiClient $provider)
-    {
-        $this->provider = $provider;
-    }
+    public function __construct(
+        private readonly ProvenExpertApiClient $provider,
+    ) {}
 
     /**
      * @param PageModel[] $parents
      */
     public function __invoke(array $parents, PageModel $page): void
     {
-        if (empty($parents)) {
+        if ([] === $parents) {
             return;
         }
 

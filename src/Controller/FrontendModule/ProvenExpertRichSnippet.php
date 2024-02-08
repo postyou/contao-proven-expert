@@ -31,22 +31,17 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
 {
     public const TYPE = 'proven_expert_rich_snippet';
 
-    private $peApiClient;
-    private $peCache;
-    private $db;
-
-    public function __construct(ProvenExpertApiClient $peApiClient, TagAwareAdapterInterface $peCache, Connection $db)
-    {
-        $this->peApiClient = $peApiClient;
-        $this->peCache = $peCache;
-        $this->db = $db;
-    }
+    public function __construct(
+        private readonly ProvenExpertApiClient $peApiClient,
+        private readonly TagAwareAdapterInterface $peCache,
+        private readonly Connection $db,
+    ) {}
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $page = $this->getPageModel();
 
-        if (null === $page) {
+        if (!$page) {
             return new Response();
         }
 

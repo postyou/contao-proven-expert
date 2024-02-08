@@ -24,17 +24,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WidgetUtil
 {
-    /** @var HttpClientInterface */
-    private $client;
-
-    /** @var LoggerInterface */
-    private $logger;
-
-    public function __construct(HttpClientInterface $client, LoggerInterface $logger)
-    {
-        $this->client = $client;
-        $this->logger = $logger;
-    }
+    public function __construct(
+        private readonly HttpClientInterface $client,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function moveStylesToHead(string $html): string
     {

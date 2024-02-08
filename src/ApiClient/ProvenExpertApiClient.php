@@ -22,20 +22,13 @@ class ProvenExpertApiClient
 {
     private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
 
-    /** @var HttpClientInterface */
-    private $client;
-
     /** @var string[] */
     private $credentials;
 
-    /** @var LoggerInterface */
-    private $logger;
-
-    public function __construct(HttpClientInterface $client, LoggerInterface $logger)
-    {
-        $this->client = $client;
-        $this->logger = $logger;
-    }
+    public function __construct(
+        private readonly HttpClientInterface $client,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @param string[] $credentials
