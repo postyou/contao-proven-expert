@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace Postyou\ContaoProvenExpert\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
-use Contao\Template;
 use Doctrine\DBAL\Connection;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
 use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheItem;
@@ -26,9 +26,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @FrontendModule(category="miscellaneous")
- */
+#[AsFrontendModule(template: 'mod_proven_expert_widget')]
 class ProvenExpertWidget extends AbstractFrontendModuleController
 {
     public const TYPE = 'proven_expert_widget';
@@ -40,11 +38,11 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
         private readonly Connection $db,
     ) {}
 
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
         $page = $this->getPageModel();
 
-        if (!$page) {
+        if (null === $page) {
             return new Response();
         }
 

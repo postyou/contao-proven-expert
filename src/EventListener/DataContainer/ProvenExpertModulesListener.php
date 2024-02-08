@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\EventListener\DataContainer;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags;
 
@@ -23,10 +23,9 @@ class ProvenExpertModulesListener
     ) {}
 
     /**
-     * @Callback(table="tl_module", target="fields.peWidgetType.options")
-     *
      * @return array<string, string>|void
      */
+    #[AsCallback('tl_module', 'fields.peWidgetType.options')]
     public function onOptions(mixed $dc)
     {
         if (!$dc instanceof DataContainer) {
@@ -46,9 +45,7 @@ class ProvenExpertModulesListener
         ];
     }
 
-    /**
-     * @Callback(table="tl_module", target="config.onsubmit")
-     */
+    #[AsCallback('tl_module', 'config.onsubmit')]
     public function onSubmit(mixed $dc): void
     {
         if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with((string) $dc->activeRecord->type, 'proven_expert_')) {
