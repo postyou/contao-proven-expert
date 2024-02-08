@@ -15,7 +15,6 @@ use Postyou\ContaoProvenExpert\Controller\FrontendModule\ProvenExpertRichSnippet
 use Postyou\ContaoProvenExpert\Controller\FrontendModule\ProvenExpertWidget;
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['peWidgetType'] = [
-    'exclude' => true,
     'inputType' => 'select',
     'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50', 'submitOnChange' => true],
     'sql' => ['type' => Types::STRING, 'length' => 64, 'default' => ''],
@@ -23,14 +22,12 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['peWidgetType'] = [
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['peWidgetWidth'] = [
     'inputType' => 'text',
-    'exclude' => true,
     'eval' => ['mandatory' => true, 'maxlength' => 128, 'tl_class' => 'w50', 'rgxp' => 'natural'],
     'sql' => ['type' => Types::STRING, 'length' => 128, 'default' => ''],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['peWidgetOptions'] = [
     'inputType' => 'keyValueWizard',
-    'exclude' => true,
     'eval' => ['tl_class' => 'clr'],
     'sql' => ['type' => Types::TEXT, 'length' => 65535, 'notnull' => false],
 ];

@@ -24,14 +24,12 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['usePeApi'] = [
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['peApiId'] = [
     'inputType' => 'text',
-    'exclude' => true,
     'eval' => ['maxlength' => 128, 'tl_class' => 'w50', 'rgxp' => 'alnum'],
     'sql' => ['type' => 'string', 'length' => 128, 'default' => ''],
 ];
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['peApiKey'] = [
     'inputType' => 'text',
-    'exclude' => true,
     'eval' => ['maxlength' => 128, 'tl_class' => 'w50', 'rgxp' => 'alnum'],
     'sql' => ['type' => 'string', 'length' => 128, 'default' => ''],
 ];
@@ -39,7 +37,6 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['peApiKey'] = [
 $GLOBALS['TL_DCA']['tl_page']['fields']['peUploadDirectory'] = [
     'inputType' => 'fileTree',
     'default' => null,
-    'exclude' => true,
     'eval' => ['fieldType' => 'radio', 'tl_class' => 'clr', 'mandatory' => true],
     'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false],
 ];
