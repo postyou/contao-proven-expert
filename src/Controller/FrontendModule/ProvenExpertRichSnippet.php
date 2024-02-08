@@ -49,7 +49,7 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
             return new Response();
         }
 
-        $peCacheItem = new ProvenExpertCacheItem($this->peCache, $page, $model);
+        $peCacheItem = new ProvenExpertCacheItem($this->peCache, $page->rootId, $model->id);
 
         if (!$peCacheItem->isHit()) {
             $html = $this->getHtml($model);
@@ -59,7 +59,8 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
             $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $model->id]);
         }
 
-        $template->peHtml = $peCacheItem->get();
+        // Get either the cached version or the db fallback.
+        $template->peHtml = $peCacheItem->get() ?: $model->peHtml;
 
         return $template->getResponse();
     }

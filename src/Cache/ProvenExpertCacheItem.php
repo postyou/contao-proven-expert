@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\Cache;
 
-use Contao\ModuleModel;
-use Contao\PageModel;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 class ProvenExpertCacheItem
@@ -22,11 +20,11 @@ class ProvenExpertCacheItem
 
     public function __construct(
         private readonly TagAwareAdapterInterface $peCache,
-        PageModel $page,
-        private readonly ModuleModel $model,
+        int $rootPageId,
+        private readonly int $modelId,
     ) {
-        $key = implode('.', ['contao_proven_expert', $page->rootId, $this->model->id]);
-        $this->cacheItem = $this->peCache->getItem($key);
+        $key = implode('.', ['contao_proven_expert', $rootPageId, $modelId]);
+        $this->cacheItem = $peCache->getItem($key);
     }
 
     public function isHit(): bool
@@ -41,18 +39,15 @@ class ProvenExpertCacheItem
             ->expiresAfter(\DateInterval::createFromDateString('1 hour'))
             ->tag([
                 ProvenExpertCacheTags::NAMESPACE,
-                ProvenExpertCacheTags::moduleTag($this->model->id),
+                ProvenExpertCacheTags::moduleTag($this->modelId),
             ])
         ;
 
         $this->peCache->save($this->cacheItem);
     }
 
-    /**
-     * Get either the cached version or the db fallback.
-     */
-    public function get(): string
+    public function get(): ?string
     {
-        return $this->cacheItem->get() ?: $this->model->peHtml;
+        return $this->cacheItem->get();
     }
 }
