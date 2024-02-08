@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of postyou/contao-proven-expert
+ * This file is part of postyou/contao-proven-expert.
  *
- * (c) POSTYOU Digital- & Filmagentur
+ * (c) POSTYOU Werbeagentur
  *
  * @license LGPL-3.0+
  */
@@ -30,8 +32,6 @@ class ProvenExpertApiException extends \RuntimeException
             return 'An unknown error occurred while communicating with the ProvenExpert API.';
         }
 
-        return array_reduce($errors, static function (string $message, string $error): string {
-            return $message .= ' ProvenExpert API-Error: '.$error.'.';
-        }, '');
+        return array_reduce($errors, static fn (string $message, string $error): string => $message .= ' ProvenExpert API-Error: '.$error.'.', '');
     }
 }

@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /*
- * This file is part of postyou/contao-proven-expert
+ * This file is part of postyou/contao-proven-expert.
  *
- * (c) POSTYOU Digital- & Filmagentur
+ * (c) POSTYOU Werbeagentur
  *
  * @license LGPL-3.0+
  */
