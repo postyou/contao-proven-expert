@@ -18,18 +18,18 @@ use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\StringUtil;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
-use Postyou\ContaoProvenExpert\Cache\CacheableResponse;
+use Postyou\ContaoProvenExpert\Cache\CacheableContent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsFrontendModule(template: 'mod_proven_expert_rich_snippet')]
+#[AsFrontendModule]
 class ProvenExpertRichSnippet extends AbstractFrontendModuleController
 {
     public const TYPE = 'proven_expert_rich_snippet';
 
     public function __construct(
         private readonly ProvenExpertApiClient $peApiClient,
-        private readonly CacheableResponse $cacheableResponse,
+        private readonly CacheableContent $cacheableContent,
     ) {}
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
@@ -38,10 +38,13 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
             return new Response();
         }
 
-        return $this->cacheableResponse
+        $template->peHtml = $this->cacheableContent
             ->setContext($page, $model)
-            ->getResponse($template, fn () => $this->getContent($model))
+            ->setDbFallback('peHtml')
+            ->getResult(fn () => $this->getContent($model))
         ;
+
+        return $template->getResponse();
     }
 
     private function getContent(ModuleModel $model): string

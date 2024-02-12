@@ -19,19 +19,19 @@ use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
-use Postyou\ContaoProvenExpert\Cache\CacheableResponse;
+use Postyou\ContaoProvenExpert\Cache\CacheableContent;
 use Postyou\ContaoProvenExpert\Util\WidgetUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsFrontendModule(template: 'mod_proven_expert_widget')]
+#[AsFrontendModule]
 class ProvenExpertWidget extends AbstractFrontendModuleController
 {
     public const TYPE = 'proven_expert_widget';
 
     public function __construct(
         private readonly ProvenExpertApiClient $peApiClient,
-        private readonly CacheableResponse $cacheableResponse,
+        private readonly CacheableContent $cacheableContent,
         private readonly WidgetUtil $widgetUtil,
     ) {}
 
@@ -41,10 +41,13 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
             return new Response();
         }
 
-        return $this->cacheableResponse
+        $template->peHtml = $this->cacheableContent
             ->setContext($page, $model)
-            ->getResponse($template, fn () => $this->getContent($page, $model))
+            ->setDbFallback('peHtml')
+            ->getResult(fn () => $this->getContent($page, $model))
         ;
+
+        return $template->getResponse();
     }
 
     private function getContent(PageModel $page, ModuleModel $model): string

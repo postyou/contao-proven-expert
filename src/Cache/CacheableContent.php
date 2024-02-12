@@ -12,18 +12,20 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\Cache;
 
-use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\Response;
 
-class CacheableResponse
+class CacheableContent
 {
     private ?PageModel $pageModel;
+
     private ?ModuleModel $model;
+
+    private string $dbFallback = '';
 
     public function __construct(
         #[Autowire(service: 'contao_proven_expert.cache')]
@@ -39,10 +41,17 @@ class CacheableResponse
         return $this;
     }
 
+    public function setDbFallback(string $dbFallback): self
+    {
+        $this->dbFallback = $dbFallback;
+
+        return $this;
+    }
+
     /**
-     * @param \Closure(): string $getContent
+     * @param callable():string $callback
      */
-    public function getResponse(FragmentTemplate $template, \Closure $getContent): Response
+    public function getResult(callable $callback): string
     {
         if (null === $this->pageModel || null === $this->model) {
             throw new \LogicException('You have to call setContext first.');
@@ -51,34 +60,39 @@ class CacheableResponse
         $this->pageModel->loadDetails();
 
         if (empty($this->pageModel->peUploadDirectory)) {
-            return new Response();
+            return '';
         }
 
         $key = implode('.', [ProvenExpertCache::NAMESPACE, $this->pageModel->rootId, $this->model->id]);
         $cacheItem = $this->cache->getItem($key);
 
         if (!$cacheItem->isHit()) {
-            $html = $getContent();
+            $html = $callback();
 
             if (!empty($html)) {
-                $cacheItem
-                    ->set($html)
-                    ->expiresAfter(\DateInterval::createFromDateString('1 hour'))
-                    ->tag([
-                        ProvenExpertCache::NAMESPACE,
-                        ProvenExpertCache::moduleTag($this->model->id),
-                    ])
-                ;
-
-                $this->cache->save($cacheItem);
-
-                $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $this->model->id]);
+                $this->saveContent($cacheItem, $html, $this->model->id);
             }
         }
 
         // Get either the cached version or the db fallback.
-        $template->peHtml = $cacheItem->get() ?: $this->model->peHtml;
+        return $cacheItem->get() ?: ($this->dbFallback ? $this->model->{$this->dbFallback} : '');
+    }
 
-        return $template->getResponse();
+    private function saveContent(CacheItem $cacheItem, string $content, int $moduleId): void
+    {
+        $cacheItem
+            ->set($content)
+            ->expiresAfter(\DateInterval::createFromDateString('1 hour'))
+            ->tag([
+                ProvenExpertCache::NAMESPACE,
+                ProvenExpertCache::moduleTag($moduleId),
+            ])
+        ;
+
+        $this->cache->save($cacheItem);
+
+        if ($this->dbFallback) {
+            $this->db->update('tl_module', [$this->dbFallback => $content], ['id' => $moduleId]);
+        }
     }
 }
