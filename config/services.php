@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 
 return static function (ContainerConfigurator $container): void {
@@ -23,6 +24,10 @@ return static function (ContainerConfigurator $container): void {
 
     $services->load('Postyou\\ContaoProvenExpert\\', '../src/')
         ->exclude('../src/{ContaoManager,DependencyInjection}')
+    ;
+
+    $services->set(ProvenExpertCache::class)
+        ->public()
     ;
 
     $services->set('contao_proven_expert.cache')
