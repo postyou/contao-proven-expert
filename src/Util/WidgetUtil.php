@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\Util;
 
-use Contao\Config;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\File;
 use Contao\FilesModel;
@@ -28,7 +27,7 @@ class WidgetUtil
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly LoggerInterface $logger,
-        #[Autowire('%kernel.debug%')]
+        #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
     ) {}
 

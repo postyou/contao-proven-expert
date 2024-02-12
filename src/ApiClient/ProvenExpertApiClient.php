@@ -28,7 +28,7 @@ class ProvenExpertApiClient
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly LoggerInterface $logger,
-        #[Autowire('%kernel.debug%')]
+        #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
     ) {}
 
