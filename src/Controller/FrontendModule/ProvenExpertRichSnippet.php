@@ -34,7 +34,7 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
-        if (null === ($page = $this->getPageModel())) {
+        if (!($page = $this->getPageModel())) {
             return new Response();
         }
 

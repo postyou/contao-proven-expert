@@ -21,9 +21,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CacheableContent
 {
-    private ?PageModel $pageModel;
+    private ?PageModel $pageModel = null;
 
-    private ?ModuleModel $model;
+    private ?ModuleModel $model = null;
 
     private string $dbFallback = '';
 
@@ -53,7 +53,7 @@ class CacheableContent
      */
     public function getResult(callable $callback): string
     {
-        if (null === $this->pageModel || null === $this->model) {
+        if (!$this->pageModel || !$this->model) {
             throw new \LogicException('You have to call setContext first.');
         }
 
