@@ -9,6 +9,10 @@
             "homepage": "https://www.postyou.de"
         }
     ],
+    "support": {
+        "issues": "https://github.com/postyou/contao-proven-expert/issues",
+        "source": "https://github.com/postyou/contao-proven-expert"
+    },
     "require": {
         "php": "^8.1",
         "contao/core-bundle": "^5.3",
