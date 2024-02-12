@@ -19,6 +19,7 @@ use Contao\FilesModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -27,6 +28,8 @@ class WidgetUtil
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly LoggerInterface $logger,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $debug,
     ) {}
 
     public function moveStylesToHead(string $html): string
@@ -68,7 +71,7 @@ class WidgetUtil
         try {
             $image = $response->getContent(true);
         } catch (ExceptionInterface $e) {
-            if (Config::get('debugMode')) {
+            if ($this->debug) {
                 // Rethrow the exception in debug mode
                 throw $e;
             }

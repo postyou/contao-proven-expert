@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\ApiClient;
 
-use Contao\Config;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -28,6 +28,8 @@ class ProvenExpertApiClient
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly LoggerInterface $logger,
+        #[Autowire('%kernel.debug%')]
+        private readonly bool $debug,
     ) {}
 
     /**
@@ -90,7 +92,7 @@ class ProvenExpertApiClient
                 throw new ProvenExpertApiException($content['errors'] ?? []);
             }
         } catch (ExceptionInterface|ProvenExpertApiException $e) {
-            if (Config::get('debugMode')) {
+            if ($this->debug) {
                 // Rethrow the exception in debug mode
                 throw $e;
             }
