@@ -19,7 +19,7 @@ use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 class ProvenExpertModulesListener
 {
     public function __construct(
-        private readonly ProvenExpertCache $provenExpertCacheTags,
+        private readonly ProvenExpertCache $provenExpertCache,
     ) {}
 
     /**
@@ -53,6 +53,6 @@ class ProvenExpertModulesListener
             return;
         }
 
-        $this->provenExpertCacheTags->invalidateTagsForModule($dc->id);
+        $this->provenExpertCache->invalidateTagsForModule($dc->id);
     }
 }
