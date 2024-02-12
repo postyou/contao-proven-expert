@@ -8,10 +8,9 @@ parameters:
     paths:
         - src
 
-    phpVersion: 70200
-    
     treatPhpDocTypesAsCertain: false
    
     universalObjectCratesClasses:
         - Contao\Model
         - Contao\DataContainer
+        - Contao\CoreBundle\Twig\FragmentTemplate

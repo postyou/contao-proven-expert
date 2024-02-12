@@ -13,33 +13,29 @@ declare(strict_types=1);
 namespace Postyou\ContaoProvenExpert\Cache;
 
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class ProvenExpertCacheTags
+class ProvenExpertCache
 {
     public const NAMESPACE = 'contao_proven_expert';
 
     public function __construct(
-        private readonly TagAwareAdapterInterface $peCache,
+        #[Autowire(service: 'contao_proven_expert.cache')]
+        private readonly TagAwareAdapterInterface $cache,
     ) {}
 
-    /**
-     * @param int|string $id
-     */
-    public static function moduleTag($id): string
+    public static function moduleTag(int|string $id): string
     {
         return self::NAMESPACE.'mod_'.$id;
     }
 
-    /**
-     * @param int|string $id
-     */
-    public function invalidateTagsForModule($id): void
+    public function invalidateTagsForModule(int|string $id): void
     {
-        $this->peCache->invalidateTags([self::moduleTag($id)]);
+        $this->cache->invalidateTags([self::moduleTag($id)]);
     }
 
     public function invalidateTags(): void
     {
-        $this->peCache->invalidateTags([self::NAMESPACE]);
+        $this->cache->invalidateTags([self::NAMESPACE]);
     }
 }

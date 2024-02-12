@@ -10,8 +10,8 @@ declare(strict_types=1);
  * @license LGPL-3.0+
  */
 
-use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags;
+use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 
 $GLOBALS['TL_PURGE']['custom']['contao_proven_expert'] = [
-    'callback' => [ProvenExpertCacheTags::class, 'invalidateTags'],
+    'callback' => [ProvenExpertCache::class, 'invalidateTags'],
 ];

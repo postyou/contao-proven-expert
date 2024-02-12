@@ -18,11 +18,9 @@ use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
-use Doctrine\DBAL\Connection;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
-use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheItem;
+use Postyou\ContaoProvenExpert\Cache\CacheableResponse;
 use Postyou\ContaoProvenExpert\Util\WidgetUtil;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,43 +31,23 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
 
     public function __construct(
         private readonly ProvenExpertApiClient $peApiClient,
-        private readonly TagAwareAdapterInterface $peCache,
+        private readonly CacheableResponse $cacheableResponse,
         private readonly WidgetUtil $widgetUtil,
-        private readonly Connection $db,
     ) {}
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
-        $page = $this->getPageModel();
-
-        if (null === $page) {
+        if (null === ($page = $this->getPageModel())) {
             return new Response();
         }
 
-        $page->loadDetails();
-
-        if (empty($page->peUploadDirectory)) {
-            return new Response();
-        }
-
-        $peCacheItem = new ProvenExpertCacheItem($this->peCache, $page->rootId, $model->id);
-
-        if (!$peCacheItem->isHit()) {
-            $html = $this->getHtml($page, $model);
-
-            if (!empty($html)) {
-                $peCacheItem->set($html);
-                $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $model->id]);
-            }
-        }
-
-        // Get either the cached version or the db fallback.
-        $template->peHtml = $peCacheItem->get() ?: $model->peHtml;
-
-        return $template->getResponse();
+        return $this->cacheableResponse
+            ->setContext($page, $model)
+            ->getResponse($template, fn () => $this->getContent($page, $model))
+        ;
     }
 
-    private function getHtml(PageModel $page, ModuleModel $model): string
+    private function getContent(PageModel $page, ModuleModel $model): string
     {
         if ('custom' === $model->peWidgetType) {
             $html = $model->html;
@@ -79,7 +57,9 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
             return $html;
         }
 
+        /** @var array<array{key: string, value: int|string}> */
         $options = StringUtil::deserialize($model->peWidgetOptions, true);
+
         $options = array_combine(array_column($options, 'key'), array_column($options, 'value'));
 
         $options['type'] = $model->peWidgetType;
@@ -88,7 +68,7 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
             $options['width'] = $model->peWidgetWidth;
         }
 
-        // Fetch the widget
+        /** @var array<string, int|string> $options */
         $response = $this->peApiClient->createWidget($options);
 
         $html = \is_array($response['html']) ? implode('', $response['html']) : $response['html'];

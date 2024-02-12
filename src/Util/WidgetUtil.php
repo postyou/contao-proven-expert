@@ -41,10 +41,16 @@ class WidgetUtil
         return $html;
     }
 
-    public function downloadImageSrc(string &$html, PageModel $page, $modelId): void
+    public function downloadImageSrc(string &$html, PageModel $page, int $modelId): void
     {
+        /** @phpstan-ignore-next-line (wrong argument.type) */
         $uuid = StringUtil::binToUuid($page->peUploadDirectory);
         $folder = FilesModel::findByUuid($uuid);
+
+        if (null === $folder) {
+            throw new \RuntimeException(sprintf('Could not find the configured folder in page %s for ProvenExpert Image downloads.', $page->id));
+        }
+
         $filePath = $folder->path.'/pe_'.$page->rootId.'_widget_'.$modelId;
 
         preg_match_all('/<img\s+.*?src\s*=\s*([\'"])(.*?)\1/i', $html, $matches);

@@ -17,10 +17,8 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\StringUtil;
-use Doctrine\DBAL\Connection;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
-use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheItem;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Postyou\ContaoProvenExpert\Cache\CacheableResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,43 +29,24 @@ class ProvenExpertRichSnippet extends AbstractFrontendModuleController
 
     public function __construct(
         private readonly ProvenExpertApiClient $peApiClient,
-        private readonly TagAwareAdapterInterface $peCache,
-        private readonly Connection $db,
+        private readonly CacheableResponse $cacheableResponse,
     ) {}
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
-        $page = $this->getPageModel();
-
-        if (null === $page) {
+        if (null === ($page = $this->getPageModel())) {
             return new Response();
         }
 
-        $page->loadDetails();
-
-        if (empty($page->peUploadDirectory)) {
-            return new Response();
-        }
-
-        $peCacheItem = new ProvenExpertCacheItem($this->peCache, $page->rootId, $model->id);
-
-        if (!$peCacheItem->isHit()) {
-            $html = $this->getHtml($model);
-
-            if (!empty($html)) {
-                $peCacheItem->set($html);
-                $this->db->update('tl_module', ['peHtml' => $html], ['id' => (int) $model->id]);
-            }
-        }
-
-        // Get either the cached version or the db fallback.
-        $template->peHtml = $peCacheItem->get() ?: $model->peHtml;
-
-        return $template->getResponse();
+        return $this->cacheableResponse
+            ->setContext($page, $model)
+            ->getResponse($template, fn () => $this->getContent($model))
+        ;
     }
 
-    private function getHtml(ModuleModel $model): string
+    private function getContent(ModuleModel $model): string
     {
+        /** @var array<array{key: string, value: int|string}> $options */
         $options = StringUtil::deserialize($model->peWidgetOptions, true);
         $options = array_combine(array_column($options, 'key'), array_column($options, 'value'));
 

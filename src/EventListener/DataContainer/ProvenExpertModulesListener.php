@@ -14,12 +14,12 @@ namespace Postyou\ContaoProvenExpert\EventListener\DataContainer;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
-use Postyou\ContaoProvenExpert\Cache\ProvenExpertCacheTags;
+use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 
 class ProvenExpertModulesListener
 {
     public function __construct(
-        private readonly ProvenExpertCacheTags $provenExpertCacheTags,
+        private readonly ProvenExpertCache $provenExpertCacheTags,
     ) {}
 
     /**
@@ -48,6 +48,7 @@ class ProvenExpertModulesListener
     #[AsCallback('tl_module', 'config.onsubmit')]
     public function onSubmit(mixed $dc): void
     {
+        // @phpstan-ignore-next-line (mixed activeRecord)
         if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with((string) $dc->activeRecord->type, 'proven_expert_')) {
             return;
         }

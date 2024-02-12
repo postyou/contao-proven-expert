@@ -12,17 +12,15 @@ declare(strict_types=1);
 
 namespace Postyou\ContaoProvenExpert\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\PageModel;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
 
-/**
- * @Hook("loadPageDetails")
- */
+#[AsHook('loadPageDetails')]
 class LoadPageDetailsListener
 {
     public function __construct(
-        private readonly ProvenExpertApiClient $provider,
+        private readonly ProvenExpertApiClient $apiClient,
     ) {}
 
     /**
@@ -45,8 +43,9 @@ class LoadPageDetailsListener
             return;
         }
 
-        if (!empty($root->peApiId) && !empty($root->peApiKey)) {
-            $this->provider->setCredentials([$root->peApiId, $root->peApiKey]);
+        if ('' !== $root->peApiId && '' !== $root->peApiKey) {
+            // @phpstan-ignore-next-line (wrong argument.type)
+            $this->apiClient->setCredentials([$root->peApiId, $root->peApiKey]);
         }
 
         $page->peUploadDirectory = $root->peUploadDirectory;
