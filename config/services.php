@@ -16,22 +16,22 @@ use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 
 return static function (ContainerConfigurator $container): void {
-    $services = $container->services()
+    $container->services()
         ->defaults()
             ->autowire()
             ->autoconfigure()
-    ;
 
-    $services->load('Postyou\\ContaoProvenExpert\\', '../src/')
-        ->exclude('../src/{ContaoManager,DependencyInjection}')
-    ;
+        ->load('Postyou\\ContaoProvenExpert\\', '../src/')
+            ->exclude('../src/{ContaoManager,DependencyInjection}')
 
-    $services->set(ProvenExpertCache::class)
-        ->public()
-    ;
+        ->set(ProvenExpertCache::class)
+            ->public()
 
-    $services->set('contao_proven_expert.cache')
-        ->class(FilesystemTagAwareAdapter::class)
-        ->args(['contao_proven_expert', 0, '%kernel.cache_dir%'])
+        ->set('contao_proven_expert.cache')
+            ->class(FilesystemTagAwareAdapter::class)
+            ->args([
+                '$namespace' => ProvenExpertCache::NAMESPACE,
+                '$directory' => param('kernel.cache_dir'),
+            ])
     ;
 };
