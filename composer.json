@@ -19,6 +19,7 @@
         "doctrine/dbal": "^3.6",
         "psr/log": "^3.0",
         "symfony/cache": "^6.4",
+        "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
         "symfony/http-client": "^6.4",
         "symfony/http-kernel": "^6.4"

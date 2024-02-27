@@ -31,6 +31,7 @@ class CacheableContent
         #[Autowire(service: 'contao_proven_expert.cache')]
         private readonly TagAwareAdapterInterface $cache,
         private readonly Connection $db,
+        private readonly int $cacheLifetime,
     ) {}
 
     public function setContext(PageModel $pageModel, ModuleModel $model): self
@@ -82,7 +83,7 @@ class CacheableContent
     {
         $cacheItem
             ->set($content)
-            ->expiresAfter(\DateInterval::createFromDateString('1 hour'))
+            ->expiresAfter($this->cacheLifetime)
             ->tag([
                 ProvenExpertCache::NAMESPACE,
                 ProvenExpertCache::moduleTag($moduleId),

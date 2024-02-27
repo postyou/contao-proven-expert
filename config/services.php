@@ -20,6 +20,7 @@ return static function (ContainerConfigurator $container): void {
         ->defaults()
             ->autowire()
             ->autoconfigure()
+            ->bind('$cacheLifetime', param('contao_proven_expert.cache_lifetime'))
 
         ->load('Postyou\\ContaoProvenExpert\\', '../src/')
             ->exclude('../src/{ContaoManager,DependencyInjection}')
