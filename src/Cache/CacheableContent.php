@@ -21,9 +21,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CacheableContent
 {
-    private ?PageModel $pageModel = null;
+    private PageModel|null $pageModel = null;
 
-    private ?ModuleModel $model = null;
+    private ModuleModel|null $model = null;
 
     private string $dbFallback = '';
 

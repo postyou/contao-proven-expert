@@ -78,13 +78,13 @@ class WidgetUtil
 
             $this->logger->error(
                 'ProvenExpert image download: '.$e->getMessage().' Try activating the debug mode for more details.',
-                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]
+                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)],
             );
 
             return '';
         }
 
-        $ext = strtok(pathinfo($url, PATHINFO_EXTENSION), '?');
+        $ext = strtok(pathinfo($url, \PATHINFO_EXTENSION), '?');
         $file = new File($path.'.'.$ext);
 
         $file->write($image);

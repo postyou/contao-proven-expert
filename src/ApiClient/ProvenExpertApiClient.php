@@ -22,7 +22,9 @@ class ProvenExpertApiClient
 {
     private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
 
-    /** @var string[] */
+    /**
+     * @var array<string>
+     */
     private $credentials;
 
     public function __construct(
@@ -34,7 +36,7 @@ class ProvenExpertApiClient
     ) {}
 
     /**
-     * @param string[] $credentials
+     * @param array<string> $credentials
      */
     public function setCredentials(array $credentials): void
     {
@@ -44,7 +46,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, int|string> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: array<string> }
      */
     public function createWidget(array $data): array
     {
@@ -54,7 +56,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, int|string> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: array<string> }
      */
     public function getRichsnippet(array $data = []): array
     {
@@ -64,7 +66,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, mixed> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: array<string> }
      */
     private function request(string $path, array $data): array
     {
@@ -76,13 +78,13 @@ class ProvenExpertApiClient
                 'body' => [
                     'data' => $data,
                 ],
-            ]
+            ],
         );
 
         $content = [];
 
         try {
-            /** @var array{ 'status'?: 'error'|'success', 'html'?: string|string[], 'errors'?: string[] } $content */
+            /** @var array{ 'status'?: 'error'|'success', 'html'?: string|array<string>, 'errors'?: array<string> } $content */
             $content = $response->toArray(true);
 
             if (!isset($content['status'])) {
@@ -100,7 +102,7 @@ class ProvenExpertApiClient
 
             $this->logger->error(
                 $e->getMessage().' Try activating the debug mode for more details.',
-                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]
+                ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)],
             );
         }
 

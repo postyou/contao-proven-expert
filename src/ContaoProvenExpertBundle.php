@@ -24,7 +24,6 @@ class ContaoProvenExpertBundle extends AbstractBundle
     {
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $definition->rootNode();
-
         $rootNode
             ->children()
                 ->integerNode('cache_lifetime')->defaultValue(3600)->end()
@@ -33,7 +32,7 @@ class ContaoProvenExpertBundle extends AbstractBundle
     }
 
     /**
-     * @param mixed[] $config
+     * @param array<mixed> $config
      */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {

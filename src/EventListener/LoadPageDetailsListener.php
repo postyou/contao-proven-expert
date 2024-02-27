@@ -24,7 +24,7 @@ class LoadPageDetailsListener
     ) {}
 
     /**
-     * @param PageModel[] $parents
+     * @param array<PageModel> $parents
      */
     public function __invoke(array $parents, PageModel $page): void
     {
