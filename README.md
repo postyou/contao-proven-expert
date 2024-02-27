@@ -14,7 +14,7 @@ This extension tries to store ProvenExpert content locally whenever possible, so
 
 ## Cache
 
-The API response is cached and automatically updated every hour. You can manually clear the cache by either:
+The API response is cached and automatically updated every hour (default). You can manually clear the cache by either:
 
 -   saving the corresponding frontend module or
 -   purging the ProvenExpert cache via the system maintenance
@@ -47,3 +47,10 @@ This provides a simple HTML field into which you can paste HTML code generated i
 ### ProvenExpert RichSnippet
 
 Creates a new rich snippet for google rating. Available options at [developer.provenexpert.com/#rating-summary-richsnippet](https://developer.provenexpert.com/#rating-summary-richsnippet).
+
+## Configuration
+
+```yaml
+contao_proven_expert:
+    cache_lifetime: 3600
+```
