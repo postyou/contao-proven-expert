@@ -22,19 +22,25 @@ class ContaoProvenExpertBundle extends AbstractBundle
 {
     public function configure(DefinitionConfigurator $definition): void
     {
-        /** @var ArrayNodeDefinition $root */
-        $root = $definition->rootNode();
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $definition->rootNode();
 
-        $root
+        $rootNode
             ->children()
                 ->integerNode('cache_lifetime')->defaultValue(3600)->end()
             ->end()
         ;
     }
 
-    /** @param mixed[] $config */
+    /**
+     * @param mixed[] $config
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.php');
+
+        $container->parameters()
+            ->set('contao_proven_expert.cache_lifetime', $config['cache_lifetime'])
+        ;
     }
 }
