@@ -43,7 +43,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, int|string> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
      */
     public function createWidget(array $data): array
     {
@@ -53,7 +53,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, int|string> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
      */
     public function getRichsnippet(array $data = []): array
     {
@@ -63,7 +63,7 @@ class ProvenExpertApiClient
     /**
      * @param array<string, mixed> $data
      *
-     * @return array{ 'status'?: 'error'|'success', 'errors'?: string[], 'html': string }
+     * @return array{ 'status'?: 'error'|'success', 'html': string, 'errors'?: string[] }
      */
     private function request(string $path, array $data): array
     {
@@ -81,7 +81,7 @@ class ProvenExpertApiClient
         $content = [];
 
         try {
-            /** @var array{ 'status'?: 'error'|'success', 'errors'?: string[] } $content */
+            /** @var array{ 'status'?: 'error'|'success', 'html'?: string|string[], 'errors'?: string[] } $content */
             $content = $response->toArray(true);
 
             if (!isset($content['status'])) {
@@ -105,6 +105,8 @@ class ProvenExpertApiClient
 
         if (!isset($content['html'])) {
             $content['html'] = '';
+        } elseif (\is_array($content['html'])) {
+            $content['html'] = implode('', $content['html']);
         }
 
         return $content;

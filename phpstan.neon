@@ -8,8 +8,6 @@ parameters:
     paths:
         - src
 
-    treatPhpDocTypesAsCertain: false
-   
     universalObjectCratesClasses:
         - Contao\Model
         - Contao\DataContainer

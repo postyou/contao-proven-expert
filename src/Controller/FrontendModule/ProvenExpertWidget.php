@@ -74,7 +74,7 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
         /** @var array<string, int|string> $options */
         $response = $this->peApiClient->createWidget($options);
 
-        $html = \is_array($response['html']) ? implode('', $response['html']) : $response['html'];
+        $html = $response['html'];
 
         $this->widgetUtil->downloadImageSrc($html, $page, $model->id);
 
