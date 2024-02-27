@@ -20,6 +20,7 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Postyou\ContaoProvenExpert\ApiClient\ProvenExpertApiClient;
 use Postyou\ContaoProvenExpert\Cache\CacheableContent;
+use Postyou\ContaoProvenExpert\Cache\ProvenExpertCache;
 use Postyou\ContaoProvenExpert\Util\WidgetUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,7 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
         private readonly ProvenExpertApiClient $peApiClient,
         private readonly CacheableContent $cacheableContent,
         private readonly WidgetUtil $widgetUtil,
+        private readonly int $cacheLifetime,
     ) {}
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
@@ -47,7 +49,12 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
             ->getResult(fn () => $this->getContent($page, $model))
         ;
 
-        return $template->getResponse();
+        $this->tagResponse(ProvenExpertCache::NAMESPACE);
+
+        return $template->getResponse()
+            ->setPublic()
+            ->setMaxAge($this->cacheLifetime)
+        ;
     }
 
     private function getContent(PageModel $page, ModuleModel $model): string
