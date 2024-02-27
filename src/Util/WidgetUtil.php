@@ -27,6 +27,7 @@ class WidgetUtil
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly LoggerInterface $logger,
+
         #[Autowire(param: 'kernel.debug')]
         private readonly bool $debug,
     ) {}

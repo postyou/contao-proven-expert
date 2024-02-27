@@ -22,6 +22,7 @@ class ProvenExpertCache
 
     public function __construct(
         private readonly CacheManager $cacheManager,
+
         #[Autowire(service: 'contao_proven_expert.cache')]
         private readonly TagAwareAdapterInterface $cache,
     ) {}
