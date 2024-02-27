@@ -3,18 +3,18 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
-use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
+use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
 $header = <<<'EOF'
-This file is part of postyou/contao-proven-expert.
+    This file is part of postyou/contao-proven-expert.
 
-(c) POSTYOU Werbeagentur
+    (c) POSTYOU Werbeagentur
 
-@license LGPL-3.0+
-EOF;
+    @license LGPL-3.0+
+    EOF;
 
 return ECSConfig::configure()
     ->withPhpCsFixerSets(
@@ -25,13 +25,15 @@ return ECSConfig::configure()
     )
     ->withSkip([
         MethodChainingIndentationFixer::class => [
-           '*/ContaoProvenExpertBundle.php'
+            'config/services.php',
+            '*/ContaoProvenExpertBundle.php',
         ],
         MethodArgumentSpaceFixer::class,
     ])
     ->withPaths([
-        __DIR__.'/src',
+        __DIR__.'/config',
         __DIR__.'/contao',
+        __DIR__.'/src',
     ])
     ->withConfiguredRule(HeaderCommentFixer::class, ['header' => $header])
     ->withSpacing(Option::INDENTATION_SPACES, "\n")
