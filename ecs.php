@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use Contao\EasyCodingStandard\Set\SetList;
 use PhpCsFixer\Fixer\Basic\SingleLineEmptyBodyFixer;
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
+use PhpCsFixer\Fixer\FunctionNotation\MultilinePromotedPropertiesFixer;
 use PhpCsFixer\Fixer\Whitespace\MethodChainingIndentationFixer;
-use PhpCsFixerCustomFixers\Fixer\MultilinePromotedPropertiesFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
@@ -18,13 +19,7 @@ $header = <<<'EOF'
     EOF;
 
 return ECSConfig::configure()
-    ->withSets([__DIR__.'/vendor/contao/easy-coding-standard/config/contao.php'])
-    ->withPhpCsFixerSets(
-        symfony: true,
-        symfonyRisky: true,
-        php82Migration: true,
-        php80MigrationRisky: true
-    )
+    ->withSets([SetList::CONTAO])
     ->withConfiguredRule(HeaderCommentFixer::class, ['header' => $header])
     ->withConfiguredRule(MultilinePromotedPropertiesFixer::class, ['keep_blank_lines' => true])
     ->withRules([SingleLineEmptyBodyFixer::class])

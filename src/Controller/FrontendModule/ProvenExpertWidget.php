@@ -60,7 +60,7 @@ class ProvenExpertWidget extends AbstractFrontendModuleController
     private function getContent(PageModel $page, ModuleModel $model): string
     {
         if ('custom' === $model->peWidgetType) {
-            $html = $model->html;
+            $html = $model->html ?? '';
 
             $this->widgetUtil->downloadImageSrc($html, $page, $model->id);
 

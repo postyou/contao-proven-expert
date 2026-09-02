@@ -76,7 +76,15 @@ class CacheableContent
         }
 
         // Get either the cached version or the db fallback.
-        return $cacheItem->get() ?: ($this->dbFallback ? $this->model->{$this->dbFallback} : '');
+        $cached = $cacheItem->get();
+
+        if (\is_string($cached) && '' !== $cached) {
+            return $cached;
+        }
+
+        $fallback = '' !== $this->dbFallback ? $this->model->{$this->dbFallback} : '';
+
+        return \is_string($fallback) ? $fallback : '';
     }
 
     private function saveContent(CacheItem $cacheItem, string $content, int $moduleId): void

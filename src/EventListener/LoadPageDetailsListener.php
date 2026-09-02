@@ -43,9 +43,11 @@ class LoadPageDetailsListener
             return;
         }
 
-        if ('' !== $root->peApiId && '' !== $root->peApiKey) {
-            // @phpstan-ignore-next-line (wrong argument.type)
-            $this->apiClient->setCredentials([$root->peApiId, $root->peApiKey]);
+        $apiId = $root->peApiId;
+        $apiKey = $root->peApiKey;
+
+        if (\is_string($apiId) && '' !== $apiId && \is_string($apiKey) && '' !== $apiKey) {
+            $this->apiClient->setCredentials([$apiId, $apiKey]);
         }
 
         $page->peUploadDirectory = $root->peUploadDirectory;

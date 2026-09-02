@@ -23,9 +23,9 @@ class ProvenExpertApiClient
     private const BASE_URI = 'https://www.provenexpert.com/api/v1/';
 
     /**
-     * @var array<string>
+     * @var array<string>|null
      */
-    private $credentials;
+    private array|null $credentials = null;
 
     public function __construct(
         private readonly HttpClientInterface $client,

@@ -35,10 +35,15 @@ class WidgetUtil
     public function moveStylesToHead(string $html): string
     {
         if (preg_match_all('/<style[\s\S]+?<\/style>/s', $html, $matches)) {
+            $head = $GLOBALS['TL_HEAD'] ?? [];
+            $head = \is_array($head) ? $head : [];
+
             foreach ($matches[0] as $match) {
                 $html = str_replace($match, '', $html);
-                $GLOBALS['TL_HEAD'][] = $match;
+                $head[] = $match;
             }
+
+            $GLOBALS['TL_HEAD'] = $head;
         }
 
         return $html;
@@ -46,12 +51,11 @@ class WidgetUtil
 
     public function downloadImageSrc(string &$html, PageModel $page, int $modelId): void
     {
-        /** @phpstan-ignore-next-line (wrong argument.type) */
-        $uuid = StringUtil::binToUuid($page->peUploadDirectory);
-        $folder = FilesModel::findByUuid($uuid);
+        $directory = $page->peUploadDirectory;
+        $folder = \is_string($directory) && '' !== $directory ? FilesModel::findByUuid(StringUtil::binToUuid($directory)) : null;
 
         if (null === $folder) {
-            throw new \RuntimeException(sprintf('Could not find the configured folder in page %s for ProvenExpert Image downloads.', $page->id));
+            throw new \RuntimeException(\sprintf('Could not find the configured folder in page %s for ProvenExpert Image downloads.', $page->id));
         }
 
         $filePath = $folder->path.'/pe_'.$page->rootId.'_widget_'.$modelId;
@@ -84,7 +88,7 @@ class WidgetUtil
             return '';
         }
 
-        $ext = strtok(pathinfo($url, \PATHINFO_EXTENSION), '?');
+        $ext = strtok(pathinfo($url, PATHINFO_EXTENSION), '?');
         $file = new File($path.'.'.$ext);
 
         $file->write($image);

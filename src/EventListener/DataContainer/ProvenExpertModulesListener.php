@@ -48,8 +48,13 @@ class ProvenExpertModulesListener
     #[AsCallback('tl_module', 'config.onsubmit')]
     public function onSubmit(mixed $dc): void
     {
-        // @phpstan-ignore-next-line (mixed activeRecord)
-        if (!$dc instanceof DataContainer || null === $dc->activeRecord || !str_starts_with((string) $dc->activeRecord->type, 'proven_expert_')) {
+        if (!$dc instanceof DataContainer) {
+            return;
+        }
+
+        $type = $dc->getCurrentRecord()['type'] ?? null;
+
+        if (!\is_string($type) || !str_starts_with($type, 'proven_expert_')) {
             return;
         }
 
